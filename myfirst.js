@@ -1,9 +1,15 @@
 var http = require('http');
 var math = require('./module');
+var stringLibrary = require('./stringLibrary');
+var fileSystem = require('fs');
 
 http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.end(math.add(10,20).toString());
+  fileSystem.readFile('demofile1.html', function(err,data){
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write(data);
+    res.write(stringLibrary.returnFirstCharacter("Ayon"));
+    res.end(math.add(10,20).toString());
+  });
 }).listen(10000);
 
 // first input er naam hocche request, second ta hocche response.
@@ -25,3 +31,5 @@ http.createServer(function (req, res) {
 
 // compiler = translation -> C++ theke assembly. sob e assmbly te translate korbe
 // interpreter-compile korbe na, proti line code er jonno ultimately proti ta line individually compile 
+
+// require nodejs er special
