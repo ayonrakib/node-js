@@ -1,17 +1,55 @@
 var http = require('http');
-var math = require('./module');
-var stringLibrary = require('./stringLibrary');
-var fileSystem = require('fs');
+// var math = require('./module');
+// var stringLibrary = require('./stringLibrary');
+// var fileSystem = require('fs');
 
-http.createServer(function (req, res) {
-  fileSystem.readFile('demofile1.html', function(err,data){
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write(data);
-    res.write(stringLibrary.returnFirstCharacter("Ayon"));
-    res.end(math.add(10,20).toString());
-  });
-}).listen(10000);
+// http.createServer(function (req, res) {
+//   fileSystem.readFile('demofile1.html', function(err,data){
+//     res.writeHead(200, {'Content-Type': 'text/html'});
+//     res.write(data);
+//     res.write(stringLibrary.returnFirstCharacter("Ayon"));
+//     res.end(math.add(10,20).toString());
+//   });
+// }).listen(10000);
+var router = {};
+var age = 30;
+process.env.PORT = 10000;
+http.createServer(function (req,res){
+  console.log("New request");
+  Object.keys(req).forEach((prop)=> console.log(prop));
+  console.log("The requested url is: ",req.url);
+  if(req.url in router){
+    func = router[req.url];
+    res.end(func());
+  }
+  else{
+    res.end(`Target url ${req.url} not found`);
+  }
+  // res.end(`${Object.keys(req).forEach((prop)=> console.log(prop))}`);
+}).listen(process.env.PORT);
 
+function ayonUrl(){
+  return "My name is Ayon";
+}
+
+function evaUrl(){
+  return "My name is Eva";
+}
+
+function baseUrl(){
+  return `{'hi':'there, port number ' + ${process.env.PORT}}`;
+}
+
+// function homeUrl(){
+//   return "{name:'Scarecrow'}";
+// }
+router["/home"] = () => {
+  return "{name:'Scarecrow'}";
+};
+
+router["age"] = (age) => {
+  return `{age: ${age}}`;
+}
 // first input er naam hocche request, second ta hocche response.
 // http.createServer call korle return hobe server object, oi server object er listen method ase-8080 port paramter dibo
 // ei pc er kon port e she listen korbe
@@ -33,3 +71,5 @@ http.createServer(function (req, res) {
 // interpreter-compile korbe na, proti line code er jonno ultimately proti ta line individually compile 
 
 // require nodejs er special
+
+// assignment: ami alada alada kore likhsi function definition and attachment. ami eksathe korte chai, jeno function likha hoy and attach o hoye jaay
